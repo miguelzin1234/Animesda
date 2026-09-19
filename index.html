@@ -161,6 +161,8 @@ button:hover{
 .xp-bar{background:#202033;border-radius:20px;height:18px;overflow:hidden;margin:12px 0;}
 .xp-fill{height:100%;background:#0066ff;border-radius:20px;width:0%;transition:.4s;}
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0066ff">
 </head>
 
 
@@ -896,5 +898,10 @@ setInterval(()=>{
   <button onclick="fecharModal()">Cancelar</button>
  </div>
 </div>
+<script>
+if ("serviceWorker" in navigator) {
+ navigator.serviceWorker.register("./service-worker.js");
+}
+</script>
 </body>
 </html>

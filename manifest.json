@@ -1,15 +1,18 @@
 {
   "name": "Anime Tracker",
   "short_name": "Anime Tracker",
-  "start_url": "index.html",
+  "description": "Minha coleção de animes assistidos",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#050510",
   "theme_color": "#0066ff",
   "icons": [
     {
-      "src": "icone.png",
+      "src": "./icone.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

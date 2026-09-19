@@ -1,10 +1,19 @@
-const CACHE_NAME = "anime-tracker-v1";
-const FILES = ["./","./index.html","./manifest.json","./icone.png"];
+const CACHE_NAME="anime-tracker-v2";
+const FILES=[
+ "./",
+ "./index.html",
+ "./manifest.json",
+ "./icone.png"
+];
 
-self.addEventListener("install", e=>{
- e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(FILES)));
+self.addEventListener("install",event=>{
+ event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(FILES)));
 });
 
-self.addEventListener("fetch", e=>{
- e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+self.addEventListener("fetch",event=>{
+ event.respondWith(caches.match(event.request).then(r=>r||fetch(event.request)));
+});
+
+self.addEventListener("activate",event=>{
+ event.waitUntil(self.clients.claim());
 });
