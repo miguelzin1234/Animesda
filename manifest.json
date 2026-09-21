@@ -1,11 +1,11 @@
 {
   "name": "🍥 Anime Tracker",
   "short_name": "Anime Tracker",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#050510",
   "theme_color": "#0066ff",
-  "orientation": "portrait",
+  "lang": "pt-BR",
   "icons": [
     {
       "src": "icone.jpg",
