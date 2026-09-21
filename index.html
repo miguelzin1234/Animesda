@@ -161,8 +161,119 @@ button:hover{
 .xp-bar{background:#202033;border-radius:20px;height:18px;overflow:hidden;margin:12px 0;}
 .xp-fill{height:100%;background:#0066ff;border-radius:20px;width:0%;transition:.4s;}
 </style>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0066ff">
+
+<style>
+/* Melhorias v39 */
+.container{max-width:900px;margin:auto;padding:16px;}
+.anime{padding:20px;line-height:1.5;}
+.anime img,#conteudoDetalhes img{max-width:220px!important;max-height:320px;object-fit:cover;display:block;margin:15px auto;border-radius:18px;}
+button{min-height:52px;margin-top:8px;}
+@media(max-width:600px){
+ header h1{font-size:24px;}
+ .card{padding:18px;margin-bottom:18px;}
+ p{line-height:1.5;}
+}
+</style>
+
+<style>
+/* Ajustes responsivos v40 */
+body{
+    overflow-x:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+    padding:18px;
+}
+
+.card{
+    width:100%;
+}
+
+.anime{
+    display:flex;
+    gap:18px;
+    align-items:center;
+}
+
+.anime img{
+    flex-shrink:0;
+}
+
+@media(max-width:600px){
+    header{
+        padding:18px 15px;
+    }
+
+    header h1{
+        font-size:22px;
+    }
+
+    .container{
+        padding:12px;
+    }
+
+    .card{
+        padding:16px;
+        border-radius:18px;
+    }
+
+    .anime{
+        padding:14px;
+        gap:12px;
+    }
+
+    .anime h3{
+        font-size:17px;
+    }
+
+    .anime img{
+        width:65px!important;
+        height:90px!important;
+    }
+
+    input,textarea,select,button{
+        font-size:16px;
+    }
+
+    #conteudoDetalhes img{
+        max-width:100%!important;
+    }
+}
+
+@media(min-width:900px){
+    .card{
+        padding:24px;
+    }
+}
+</style>
+
+
+<style>
+#sugestoesBox{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+}
+.sug-card{
+background:#181828;
+padding:12px;
+border-radius:18px;
+cursor:pointer;
+}
+.sug-card img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:12px;
+}
+.sug-card h3{
+color:#4da3ff;
+margin-top:8px;
+}
+</style>
 </head>
 
 
@@ -308,6 +419,13 @@ Salvar Anime
 </div>
 
 
+
+
+<div class="card">
+<h2>🔥 Sugestões de Animes</h2>
+<p>Clique em um anime para adicionar na sua lista.</p>
+<div id="sugestoesBox"></div>
+</div>
 
 <div class="card">
 
@@ -556,7 +674,7 @@ document.getElementById("detalhes").style.display = "block";
 document.getElementById("conteudoDetalhes").innerHTML = `
 
 ${anime.capa ? 
-`<img src="${anime.capa}" style="width:100%;border-radius:20px;">`
+`<img src="${anime.capa}" style="max-width:220px;max-height:320px;width:100%;object-fit:cover;border-radius:20px;display:block;margin:15px auto;">`
 :
 "🍥"
 }
@@ -898,10 +1016,72 @@ setInterval(()=>{
   <button onclick="fecharModal()">Cancelar</button>
  </div>
 </div>
+
 <script>
-if ("serviceWorker" in navigator) {
- navigator.serviceWorker.register("./service-worker.js");
+function avisoAnime(msg){
+ let n=document.createElement("div");
+ n.innerText=msg;
+ n.style.cssText="position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#0066ff;color:white;padding:14px 22px;border-radius:20px;z-index:99999;font-weight:bold;";
+ document.body.appendChild(n);
+ setTimeout(()=>n.remove(),2000);
 }
+</script>
+
+<script>
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id==="salvarAnimeBtn"){
+        setTimeout(()=>avisoAnime("✅ Anime salvo com sucesso!"),300);
+    }
+});
+</script>
+
+<script>
+const sugestoesAnime=[
+["Naruto",220,"2002","https://cdn.myanimelist.net/images/anime/13/17405.jpg"],
+["One Piece",877,"1999","https://cdn.myanimelist.net/images/anime/6/73245.jpg"],
+["Demon Slayer",63,"2019","https://cdn.myanimelist.net/images/anime/1286/99889.jpg"],
+["Solo Leveling",37,"2024","https://www.impawards.com/intl/japan/tv/posters/solo_leveling_ver2.jpg"]
+];
+
+function mostrarSugestoes(){
+ let box=document.getElementById("sugestoesBox");
+ if(!box)return;
+
+ box.innerHTML="";
+
+ sugestoesAnime.forEach(a=>{
+ box.innerHTML+=`
+ <div class="sug-card" onclick="usarSugestao('${a[0]}')">
+ <img src="${a[3]}">
+ <h3>${a[0]}</h3>
+ <p>📺 ${a[1]} episódios</p>
+ <p>📅 ${a[2]}</p>
+ </div>`;
+ });
+}
+
+function usarSugestao(nome){
+ let a=sugestoesAnime.find(x=>x[0]==nome);
+
+ animes.push({
+ nome:a[0],
+ eps:a[1],
+ ano:a[2],
+ capa:a[3],
+ nota:"⭐",
+ status:"Assistindo",
+ comentario:"Comecei a assistir este anime.",
+ favorito:false,
+ id:Date.now()
+ });
+
+ localStorage.setItem("animes",JSON.stringify(animes));
+ mostrarAnimes();
+ atualizarPerfil();
+ avisoAnime("✅ "+nome+" adicionado!");
+}
+
+setTimeout(mostrarSugestoes,500);
 </script>
 </body>
 </html>
